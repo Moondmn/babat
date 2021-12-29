@@ -6,4 +6,3 @@ random
 platform
 socket
 uuid
-requests
