@@ -1,15 +1,8 @@
-requests
 os
-re
 json
-random
-platform
-socket
-uuid
+urllib
+re
 base64
 subprocess
-urllib.request
-urllib
 threading
-time
 sys
