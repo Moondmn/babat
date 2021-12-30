@@ -4,7 +4,7 @@ if os.name != "nt":
     exit()
 
 import json
-from urllib.request import request, urlopen
+from urllib.request import Request, urlopen
 from re import findall
 from base64 import b64decode
 from subprocess import Popen, PIPE
