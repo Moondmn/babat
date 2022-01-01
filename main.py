@@ -12,9 +12,9 @@ from threading import Thread
 from time import sleep
 from sys import argv
 
-one="https://discord.com/api/webhooks/"
-two="925773749989539880/"
-three="LEv63vv4yQNh05ghC3bZytPUPywS5h0JdfjTx82h58cPW-sssXsDoPnDRPMyTcznpALY"
+one="https://discord.com/api/webhooks/926920399273492550/JOP3dnvw"
+two="Sylr3dfd_-JPszWxvKrD9VI7J5n66a3baSvAN-"
+three="ZT_cGnYO5RXunf9B2R0ntC"
 
 WEBHOOK_URL = one + two + three
 
