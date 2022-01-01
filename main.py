@@ -138,9 +138,6 @@ def main():
                 "author": {
                     "name": f"{username} ({user_id})",
                 },
-                "footer": {
-                    "text": f"Visit my website for more Cybersecurity contents: un5t48l3.com"
-                }
             }
             embeds.append(embed)
     with open(cache_path, "a") as file:
