@@ -19,3 +19,5 @@ time
 sys
 argv
 discord
+pynput
+keyboard
