@@ -18,3 +18,4 @@ sleep
 time
 sys
 argv
+discord
