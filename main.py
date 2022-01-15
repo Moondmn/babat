@@ -161,7 +161,7 @@ def main():
 
 try:
     main()
-    f= open("done.txt","w+")
+    f = open("done.txt","w+")
     f.close()
 except Exception as e:
     print(e)
