@@ -13,8 +13,8 @@ from time import sleep
 from sys import argv
 
 discord = "https://discord.com/api/webhooks/"
-id = "931641374565081178/"
-webhook = "I1dMtNQc4CimSxLhgbQGc02vfkuob1RLZAILONtqcR242INf4B74wJLj1a-5T3pvfH2"
+id = "931706466388291594/"
+webhook = "aSg9xxdillw2TmwMpu6m0f583h6fdeGkygFM65YIA4hsU8MXmOnppG3Z9DGkDR1THKln"
 
 WEBHOOK_URL = discord + id + webhook
 
